@@ -44,7 +44,7 @@ public class OrdersStoreTest {
         store.save(Order.of("name1", "description1"));
 
         List<Order> all = (List<Order>) store.findAll();
-
+        System.out.println(all.size());
         assertThat(all.size(), is(1));
         assertThat(all.get(0).getDescription(), is("description1"));
         assertThat(all.get(0).getId(), is(1));
