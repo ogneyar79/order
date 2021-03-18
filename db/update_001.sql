@@ -1,4 +1,4 @@
-CREATE TABLE ord
+CREATE TABLE IF NOT EXISTS ord
 (
     id          serial,
     name        VARCHAR(50),
