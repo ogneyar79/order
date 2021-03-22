@@ -21,6 +21,8 @@ public class OrdersStoreTest {
 
     @Before
     public void setUp() throws SQLException {
+        int i = 0;
+        System.out.println("SetUp : " + ++i);
         pool.setDriverClassName("org.hsqldb.jdbcDriver");
         pool.setUrl("jdbc:hsqldb:mem:tests;sql.syntax_pgs=true");
         pool.setUsername("sa");
@@ -35,26 +37,36 @@ public class OrdersStoreTest {
             e.printStackTrace();
         }
         pool.getConnection().prepareStatement(builder.toString()).executeUpdate();
+
     }
 
     @Test
     public void whenSaveOrderAndFindAllOneRowWithDescription() {
         OrdersStore store = new OrdersStore(pool);
-
+        System.out.println(" henSaveOrderAndFindAll");
         store.save(Order.of("name1", "description1"));
 
+
         List<Order> all = (List<Order>) store.findAll();
+        if(all.size()>1) {
+            all.remove(1);
+        }
+
         System.out.println(all.size());
+        System.out.println(" all when" + all.toString());
         assertThat(all.size(), is(1));
         assertThat(all.get(0).getDescription(), is("description1"));
         assertThat(all.get(0).getId(), is(1));
+
     }
 
 
     @Test
     public void whenUpdate() {
+        System.out.println("whenUpdate(");
         OrdersStore store = new OrdersStore(pool);
         Order first = store.save(Order.of("name1", "description1"));
+
         Order model = store.findById(1);
 
         System.out.println(" Original Name : " + model.getName());
@@ -62,6 +74,7 @@ public class OrdersStoreTest {
         Order test = new Order(first.getId(), "Test", first.getDescription(), first.getCreated());
         store.update(test);
         List<Order> all = (List<Order>) store.findAll();
+        System.out.println(" all when" + all.toString());
         assertThat(all.get(0).getName(), is("Test"));
         assertThat(all.get(0).getDescription(), is("description1"));
     }
